@@ -315,3 +315,8 @@ sketch
 # End of https://www.toptal.com/developers/gitignore/api/react,aspnetcore
 
 credentials.js
+appsettings.json
+.env
+
+*.pem
+*.pfx
