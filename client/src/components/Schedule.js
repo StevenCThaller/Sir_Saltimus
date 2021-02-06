@@ -3,6 +3,7 @@ import { useAuth0 } from '@auth0/auth0-react';
 import NewStream from './NewStream';
 import axios from 'axios';
 import NextStream from './NextStream';
+import SmallCard from './SmallCard';
 // import NewGame from './NewGame';
 
 const Schedule = () => {
@@ -26,8 +27,20 @@ const Schedule = () => {
                 ''
             }
             {
-                streams[0] ?
-                <NextStream stream={streams[0]}/>
+                streams.length > 0 ?
+                <div className="schedule">
+                    <NextStream stream={streams[0]}/>
+                    <div className="stack col-sm-4">
+                        {
+                            streams.map((stream, i) => {
+                                return i > 0 ?
+                                <SmallCard stream={stream}/>
+                                :
+                                ''
+                            })
+                        }
+                    </div>
+                </div>
                 : 
                 ''
             }

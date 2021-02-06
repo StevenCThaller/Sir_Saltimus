@@ -11,6 +11,8 @@ namespace Server.Models
         [Required]
         public string Title { get; set; }
 
+        public string ShortenedTitle { get; set; }
+
         [Required]
         public string ImageUrl { get; set; }
 

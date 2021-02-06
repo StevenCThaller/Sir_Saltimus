@@ -30,7 +30,7 @@ namespace Server.Controllers
         [HttpPost("/api/stream")]
         public JsonResult CreateStream([FromBody] ReactStream FromReact)
         {
-            
+            // System.Console.WriteLine(FromReact.StartTime);
             if(ModelState.IsValid)
             {
                 Stream ToAdd = new Stream()

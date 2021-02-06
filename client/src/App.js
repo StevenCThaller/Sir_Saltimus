@@ -30,11 +30,11 @@ function App() {
         :
         ''
       } */}
-      <Router>
+      {/* <Router>
         <Home isLive={ isLive } setIsLive={ setIsLive } path="/"/>
         <Schedule user={user} isAuthenticated={isAuthenticated} path="/schedule"/>
         <Profile path="/profile"/>
-      </Router>
+      </Router> */}
     </div>
   );
 }

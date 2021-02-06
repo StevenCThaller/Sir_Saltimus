@@ -4,7 +4,7 @@ const NextStream = props => {
     const { stream } = props
     return (
         <>
-        <div id="next-stream" className="col-sm-8 schedule-card-container">
+        <div id="next-stream" className="schedule-card-container">
             <div className="card-bg" style={{ backgroundImage: `url("${stream.game.imageUrl}")`}}></div>
             <div className="card-info">
                 <h2 className="card-title riffic">{stream.streamTitle}</h2>
@@ -19,7 +19,7 @@ const NextStream = props => {
                             ''
                         }
                     </h3>
-                    <h3 className="riffic"><span className="riffic bluer">Start Time:</span> {new Date(stream.startTime).toLocaleString('en-us', { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric'})}</h3>
+                    <h3 className="riffic"><span className="riffic bluer">Start Time:</span> {new Date(stream.startTime).toLocaleString('en-us', { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric'})} PST</h3>
                 </div>
             </div>
         </div>

@@ -16,7 +16,9 @@
     "passport-twitch": "^1.0.3",
     "react": "^17.0.1",
     "react-bootstrap": "^1.4.3",
+    "react-burger-menu": "^3.0.3",
     "react-dom": "^17.0.1",
+    "react-hamburger-menu": "^1.2.1",
     "react-scripts": "4.0.1",
     "react-twitch-embed": "^2.1.0",
     "web-vitals": "^0.2.4"

@@ -11,8 +11,8 @@ const NavLink = props => {
             // anchor element's props
             return {
                 style: {
-                    color: isCurrent ? "black" : "white",
-                    textShadow: isCurrent ? "1px 1px 2px white" : "1px 1px 2px black"
+                    color: isCurrent ? window.innerWidth <= 600 ? "#59c0f9" : "black" : "white",
+                    textShadow: isCurrent ? window.innerWidth <= 600 ? "1px 1px 2px black" : "1px 1px 2px white" : "1px 1px 2px black"
                 }
             };
         }}

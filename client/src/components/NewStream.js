@@ -22,6 +22,7 @@ const NewStream = props => {
     });
     const [game, setGame] = useReducer(reducer, {
         Title: "",
+        ShortenedTitle: "",
         ImageUrl: "",
         PurchaseLink: ""
     });
@@ -61,7 +62,18 @@ const NewStream = props => {
 
     const streamSubmitHandler = e => {
         e.preventDefault();
-        stream.StartTime = new Date(stream.StartTime);
+        console.log(stream.StartTime);
+        // var day = stream.StartTime.getDate();       // yields date
+        // var month = stream.StartTime.getMonth() + 1;    // yields month (add one as '.getMonth()' is zero indexed)
+        // var year = stream.StartTime.getFullYear();  // yields year
+        // var hour = stream.StartTime.getHours();     // yields hours 
+        // var minute = stream.StartTime.getMinutes(); // yields minutes
+        // var second = stream.StartTime.getSeconds(); // yields seconds
+
+        // // After this construct a string with the above results as below
+        // var time = day + "/" + month + "/" + year + " " + hour + ':' + minute + ':' + second;
+        // stream.StartTime = new Date(stream.StartTime);
+        // stream.StartTime = time;
         axios.post('https://localhost:5001/api/stream', stream)
             .then(response => console.log(response))
             .catch(err => console.log(err));
@@ -103,7 +115,7 @@ const NewStream = props => {
             </div>
             <div className="flex-row space-between align-center">
                 <label htmlFor="StartTime">Starting Time: </label>
-                <input type="datetime-local" name="StartTime" onChange={gameChange}/>
+                <input type="datetime-local" name="StartTime" onChange={streamChange}/>
             </div>
             <input type="submit" value="Submit"/>
         </form>
@@ -118,11 +130,15 @@ const NewStream = props => {
                     <input type="text" name="Title" onChange={gameChange}/>
                 </div>
                 <div className="flex-row">
+                    <label htmlFor="ShortenedTitle">Shorthand:  </label>
+                    <input type="text" name="ShortenedTitle" onChange={gameChange}/>
+                </div>
+                <div className="flex-row">
                     <label htmlFor="ImageUrl">Image Url: </label>
                     <input type="text" name="ImageUrl" onChange={gameChange}/>
                 </div>
                 <div className="flex-row">
-                    <label htmlFor="PurchaseLink">Image Url: </label>
+                    <label htmlFor="PurchaseLink">Purchase URL:  </label>
                     <input type="text" name="PurchaseLink" onChange={gameChange}/>
                 </div>
             </Modal.Body>

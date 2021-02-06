@@ -13,6 +13,8 @@ using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 using Server.Models;
 using dotenv.net.Utilities;
+using System.Text.Json.Serialization;
+using Server.Converters;
 
 namespace Server
 {
@@ -47,7 +49,7 @@ namespace Server
                         .AllowAnyHeader();
                     });
             });
-            services.AddControllers();
+            services.AddControllers().AddJsonOptions(options => options.JsonSerializerOptions.Converters.Add(new Converters.DateTimeConverter()));
             services.AddDbContext<MyContext>(options => options.UseMySql(Configuration["DBInfo:ConnectionString"]));
             services.AddMvc(options => options.EnableEndpointRouting = false);
         }
