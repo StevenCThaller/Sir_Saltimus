@@ -19,11 +19,11 @@ namespace Server.Controllers
         [HttpGet("/api/stream")]
         public JsonResult GetStreams()
         {
-            List<Stream> FiveSoonest = _context.Streams
+            IEnumerable<Stream> FiveSoonest = _context.Streams
+                .Where(s => s.StartTime > DateTime.Today)
+                .OrderBy(s => s.StartTime)
                 .Include(s => s.Game)
-                .Where(s => s.StartTime > DateTime.Now)
-                .Take(5)
-                .ToList();
+                .Take(5);
             return Json(FiveSoonest);
         }
 
@@ -48,6 +48,26 @@ namespace Server.Controllers
                 Response.StatusCode = 400;
                 return Json(ModelState);
             }
+        }
+
+        [HttpDelete("/api/stream/{StreamId}")]
+        public JsonResult DeleteStream(int StreamId)
+        {
+            Stream ToDelete = _context.Streams
+                .FirstOrDefault(s => s.StreamId == StreamId);
+            if(ToDelete != null)
+            {
+                _context.Streams.Remove(ToDelete);
+                _context.SaveChanges();
+                return Json(new { message = "success" });
+            }
+            else 
+            {
+                System.Console.WriteLine("thing don't work");
+                Response.StatusCode = 400;
+                return Json(ModelState);
+            }
+
         }
 
         

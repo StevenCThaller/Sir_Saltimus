@@ -10,7 +10,7 @@ const Header = props => {
 
     const burgerHandler = () => {
         // e.preventDefault();
-        if(responsive == ""){
+        if (responsive === "") {
             setResponsive("responsive");
         } else {
             setResponsive("");
@@ -23,26 +23,26 @@ const Header = props => {
 
     return (
         <header className="flex-row">
-            <img id="logo-header" className="col-4 col-sm-4" src={logo} alt="Sir Saltimus Logo"/>
+            <img id="logo-header" className="col-4 col-sm-4" src={logo} alt="Sir Saltimus Logo" />
             <div id="navbar" className="col-sm-8">
-                    <div id="topnav" className={responsive}>
-                        <NavLink onClick={handleResponsive} className={"navFull"} to="/">Home</NavLink>
-                        <NavLink onClick={handleResponsive} className={"navFull"} user={ user } to="/schedule">Schedule</NavLink>
-                        <NavLink onClick={handleResponsive} className={"navFull"} to="/reviews">Reviews</NavLink>
-                        <NavLink onClick={handleResponsive} className={"navFull"} to="/forum">Forum</NavLink>
-                        {/* <NavLink to="/socials">Socials</NavLink> */}
-                    </div>
-                    {
-                        isAuthenticated ? 
+                <div id="topnav" className={responsive}>
+                    <NavLink onClick={handleResponsive} className={"navFull"} to="/">Home</NavLink>
+                    <NavLink onClick={handleResponsive} className={"navFull"} user={user} to="/schedule">Schedule</NavLink>
+                    <NavLink onClick={handleResponsive} className={"navFull"} to="/reviews">Reviews</NavLink>
+                    <NavLink onClick={handleResponsive} className={"navFull"} to="/forum">Forum</NavLink>
+                    {/* <NavLink to="/socials">Socials</NavLink> */}
+                </div>
+                {
+                    isAuthenticated ?
                         <LogoutButton />
                         :
                         <LoginButton />
-                    }
-                    <a className="burgerMenu" onClick={burgerHandler}>
-                        <i className="fa fa-bars"></i>
-                    </a>
+                }
+                <a className="burgerMenu" onClick={burgerHandler}>
+                    <i className="fa fa-bars"></i>
+                </a>
             </div>
-            
+
         </header>
     )
 }

@@ -1,26 +1,27 @@
-import React, { useState, useEffect, useReducer } from 'react'
+import React, { useState, useEffect } from 'react'
 import axios from 'axios';
 import { Button, Modal } from 'react-bootstrap'
 
-const reducer = (state, action) => {
-    return {
-        ...state,
-        [action.type]: action.payload
-    };
-}
+
 
 const NewStream = props => {
-    const { user, isAuthenticated } = props;
+    const { user, isAuthenticated, getSchedule, closeForm } = props;
     const [show, setShow] = useState(false);
-
-    const [newGame, setNewGame] = useState(false);
-    const [games, setGames] = useState([]);
-    const [stream, setStream] = useReducer(reducer, {
+    const [stream, setStream] = useState({
         StreamTitle: "",
         GameId: "",
         StartTime: new Date()
-    });
-    const [game, setGame] = useReducer(reducer, {
+    })
+
+
+
+    const [games, setGames] = useState([]);
+    // const [stream, setStream] = useReducer(reducer, {
+    //     StreamTitle: "",
+    //     GameId: "",
+    //     StartTime: new Date()
+    // });
+    const [game, setGame] = useState({
         Title: "",
         ShortenedTitle: "",
         ImageUrl: "",
@@ -28,96 +29,96 @@ const NewStream = props => {
     });
 
     useEffect(() => {
-        axios.get('https://localhost:5001/api/games')
-            .then(response => {
-                setGames(response.data);
-                setStream({
-                    ...stream,
-                    GameId: response.data[0].gameId
-                })
-                // console.log(response.data);
-            })
-            .catch(err => console.log(err));
-    },[])
+        getGames();
+    }, [])
 
     const handleClose = () => setShow(false);
     const handleOpen = () => setShow(true);
 
+    const getGames = () => {
+        axios.get('https://localhost:5001/api/games')
+            .then(response => {
+                setGames(response.data);
+                console.log(response.data[0]);
+                setStream({
+                    ...stream,
+                    GameId: `${response.data[0].gameId}`
+                })
+                // console.log(response.data);
+            })
+            .catch(err => console.log(err));
+    }
 
     const streamChange = e => {
-        const { name, value } = e.target;
-        setStream({
-            type: name,
-            payload: value
-        })
+        if(e.target.name === "GameId" && e.target.value === "newgame"){
+            handleOpen();
+        } else {   
+            setStream({
+                ...stream,
+                [e.target.name]: e.target.value
+            })
+        }
     }
 
     const gameChange = e => {
-        const { name, value } = e.target;
         setGame({
-            type: name,
-            payload: value
+            ...game,
+            [e.target.name]: e.target.value
         })
     }
 
     const streamSubmitHandler = e => {
         e.preventDefault();
-        console.log(stream.StartTime);
-        // var day = stream.StartTime.getDate();       // yields date
-        // var month = stream.StartTime.getMonth() + 1;    // yields month (add one as '.getMonth()' is zero indexed)
-        // var year = stream.StartTime.getFullYear();  // yields year
-        // var hour = stream.StartTime.getHours();     // yields hours 
-        // var minute = stream.StartTime.getMinutes(); // yields minutes
-        // var second = stream.StartTime.getSeconds(); // yields seconds
-
-        // // After this construct a string with the above results as below
-        // var time = day + "/" + month + "/" + year + " " + hour + ':' + minute + ':' + second;
-        // stream.StartTime = new Date(stream.StartTime);
-        // stream.StartTime = time;
-        axios.post('https://localhost:5001/api/stream', stream)
-            .then(response => console.log(response))
+        // stream.StartTime = new Date(stream.StartTime).toUTCString();
+        // console.log(stream.StartTime);
+        axios.post('https://localhost:5001/api/stream', { ...stream, StartTime: new Date(stream.StartTime).toISOString() })
+            .then(response => {
+                setStream({
+                    StreamTitle: "",
+                    GameId: "",
+                    StartTime: new Date()
+                });
+                getSchedule();
+                closeForm();
+            })
             .catch(err => console.log(err));
     }
 
     const gameSubmitHandler = () => {
         axios.post('https://localhost:5001/api/game', game)
-            .then(response => handleClose())
+            .then(response => {
+                handleClose();
+                getGames();
+            })
             .catch(err => console.log(err));
         
     }
 
     return (
         <>
-        <form onSubmit={streamSubmitHandler}>
-            <div className="flex-row space-between">
-                <label htmlFor="StreamTitle">Stream Title: </label>
-                <input type="text" name="StreamTitle" onChange={streamChange}/>
+        <form className="new-stream" onSubmit={streamSubmitHandler} autoComplete="off">
+            <div className="row form-group flex-row align-center">
+                <label className="col-12 col-sm-4 form-label" htmlFor="StreamTitle">Stream Title: </label>
+                <input className="form-control col-12 col-sm-6" type="text" name="StreamTitle" onChange={streamChange} value={stream.StreamTitle}/>
             </div>
-            <div className="flex-row space-between align-center">
-                <label htmlFor="GameId">Game: </label>
-                    {
-                        games.length > 0 ?
-                        <>
-                        <select name="GameId" onChange={streamChange}>
-                            <option value="">test</option>
-                            {
-                                games.map((game, i) => {
-                                    return <option key={i} value={game.gameId}>{game.title}</option>
-                                })
-                            }
-                        </select>
-                        <p className="m-b-0">-- OR --</p>
-                        </>
-                        :
-                        ''
-                    }
-                    <input type="button" onClick={handleOpen} value="Add Game"/>
+            <div className="row form-group flex-row align-center">
+                <label className="col-12 col-sm-4 form-label" htmlFor="GameId">Game: </label>
+                    <select className="col-12 col-sm-6 form-control" name="GameId" onChange={streamChange} value={stream.GameId}>
+                        {
+                            games.map((game, i) => {
+                                return <option key={i} value={game.gameId}>{game.title}</option>
+                            })
+                        }
+                        <option value="newgame">Add New Game</option>
+                    </select>
             </div>
-            <div className="flex-row space-between align-center">
-                <label htmlFor="StartTime">Starting Time: </label>
-                <input type="datetime-local" name="StartTime" onChange={streamChange}/>
+            <div className="row form-group flex-row align-center">
+                <label className="col-12 col-sm-4 form-label" htmlFor="StartTime">Starting Time: </label>
+                <input className="col-12 col-sm-6 form-control" type="datetime-local" name="StartTime" onChange={streamChange} value={stream.StartTime}/>
             </div>
-            <input type="submit" value="Submit"/>
+            <div className="row form-group flex-row align-center">
+                <input className="submit-button col-4 offset-4" type="submit" value="Submit"/>
+            </div>
         </form>
 
         <Modal show={show} onHide={handleClose}>
@@ -125,21 +126,21 @@ const NewStream = props => {
                 <Modal.Title>Add New Game</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <div className="flex-row">
-                    <label htmlFor="Title">Game Title: </label>
-                    <input type="text" name="Title" onChange={gameChange}/>
+                <div className="flex-row center align-center">
+                    <label className="col-4 text-right" htmlFor="Title">Game Title: </label>
+                    <input className="col-6 form-control" type="text" name="Title" onChange={gameChange}/>
                 </div>
-                <div className="flex-row">
-                    <label htmlFor="ShortenedTitle">Shorthand:  </label>
-                    <input type="text" name="ShortenedTitle" onChange={gameChange}/>
+                <div className="flex-row center align-center">
+                    <label className="col-4 text-right" htmlFor="ShortenedTitle">Shorthand:  </label>
+                    <input className="col-6 form-control" type="text" name="ShortenedTitle" onChange={gameChange}/>
                 </div>
-                <div className="flex-row">
-                    <label htmlFor="ImageUrl">Image Url: </label>
-                    <input type="text" name="ImageUrl" onChange={gameChange}/>
+                <div className="flex-row center align-center">
+                    <label className="col-4 text-right" htmlFor="ImageUrl">Image Url: </label>
+                    <input className="col-6 form-control" type="text" name="ImageUrl" onChange={gameChange}/>
                 </div>
-                <div className="flex-row">
-                    <label htmlFor="PurchaseLink">Purchase URL:  </label>
-                    <input type="text" name="PurchaseLink" onChange={gameChange}/>
+                <div className="flex-row center align-center">
+                    <label className="col-4 text-right" htmlFor="PurchaseLink">Purchase URL:  </label>
+                    <input className="col-6 form-control" type="text" name="PurchaseLink" onChange={gameChange}/>
                 </div>
             </Modal.Body>
             <Modal.Footer>

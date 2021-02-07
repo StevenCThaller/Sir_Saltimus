@@ -1,14 +1,14 @@
 import React from 'react'
+import trash from '../imgs/trash.png';
 
-const NextStream = props => {
-    const { stream } = props
+const BigCard = props => {
+    const { stream, user, deleteStream } = props;
+
     return (
-        <>
-        <div id="next-stream" className="schedule-card-container">
-            <div className="card-bg" style={{ backgroundImage: `url("${stream.game.imageUrl}")`}}></div>
-            <div className="card-info">
-                <h2 className="card-title riffic">{stream.streamTitle}</h2>
-                <div className="card-title stream-data">
+        <div className="big-card schedule-card" style={{ backgroundImage: `url("${stream.game.imageUrl}")`}}>
+            <div className="blur">
+                <h3 className="riffic stream-info big-card-title">{stream.streamTitle} { user && user.name === "sir_saltimus" ? <span className="delete-icon" onClick={() => deleteStream(stream) }>&#10006;</span> : '' }</h3>
+                <div className="stream-info">
                     <h3 className="riffic">
                         <span className="riffic bluer">Playing:</span>&nbsp;
                         {stream.game.title}
@@ -23,9 +23,7 @@ const NextStream = props => {
                 </div>
             </div>
         </div>
-
-        </>
     )
 }
 
-export default NextStream
+export default BigCard

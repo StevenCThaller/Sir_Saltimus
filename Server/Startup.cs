@@ -49,7 +49,7 @@ namespace Server
                         .AllowAnyHeader();
                     });
             });
-            services.AddControllers().AddJsonOptions(options => options.JsonSerializerOptions.Converters.Add(new Converters.DateTimeConverter()));
+            services.AddControllers();
             services.AddDbContext<MyContext>(options => options.UseMySql(Configuration["DBInfo:ConnectionString"]));
             services.AddMvc(options => options.EnableEndpointRouting = false);
         }
