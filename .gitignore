@@ -320,3 +320,6 @@ appsettings.json
 
 *.pem
 *.pfx
+
+
+.eslintcache
