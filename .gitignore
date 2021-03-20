@@ -322,4 +322,5 @@ appsettings.json
 *.pfx
 
 
-.eslintcache
+client/.eslintcache
+.vscode
